@@ -18,6 +18,7 @@ services:
 
   migrator:
     image: flyway/flyway:latest
+    entrypoint: ./migrate_with_delay.sh 10
     command: >
       migrate
       -user=docker
@@ -26,6 +27,7 @@ services:
       -locations=filesystem:./sql
     volumes:
       - ./migrate/sql:/flyway/sql:ro
+      - ./migrate/migrate_with_delay.sh:/flyway/migrate_with_delay.sh
     depends_on:
       - db
-    restart: on-failure
+    restart: on-failure:3
